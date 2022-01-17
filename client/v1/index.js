@@ -33,7 +33,8 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // 2. Log the variable
 
 
-
+const cheapest_tshirt = "https://www.loom.fr/products/le-t-shirt";
+console.log(cheapest_tshirt);
 
 
 /**
