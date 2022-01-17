@@ -89,13 +89,19 @@ var marketplace_sort_by_price = marketplace.sort(function(a,b){
 console.log(marketplace_sort_by_price)
 
 
-
-
-
 // 🎯 TODO: Sort by date
 // 1. Create a function to sort the marketplace objects by products date
 // 2. Create a variable and assign it the list of products by date from recent to old
 // 3. Log the variable
+
+var marketplace_sort_by_date = marketplace.sort(function(a,b){
+  if (a.date < b.date){
+    return -1;
+  }else {
+    return 1;
+  };
+})
+console.log(marketplace_sort_by_date)
 
 
 // 🎯 TODO: Filter a specific price range
