@@ -83,9 +83,11 @@ console.log(different_brands_name);
 // 2. Create a variable and assign it the list of products by price from lowest to highest
 // 3. Log the variable
 
-function sort_by_product_price(){
-  
-}
+var marketplace_sort_by_price = marketplace.sort(function(a,b){
+  return a.price - b.price;
+})
+console.log(marketplace_sort_by_price)
+
 
 
 
