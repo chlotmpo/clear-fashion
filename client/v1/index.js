@@ -68,6 +68,12 @@ console.log(brands_name1);
 
 // Without for loops
 var brands_name2 = marketplace.map(a => a.brand)
+
+// with callback 
+marketplace.forEach(function(entry){
+  brands_name2.push(entry.band);
+})
+
 console.log(brands_name2);
 const different_brands_name = new Set(brands_name2);
 console.log(different_brands_name);
@@ -76,6 +82,12 @@ console.log(different_brands_name);
 // 1. Create a function to sort the marketplace products by price
 // 2. Create a variable and assign it the list of products by price from lowest to highest
 // 3. Log the variable
+
+function sort_by_product_price(){
+  
+}
+
+
 
 
 // 🎯 TODO: Sort by date
