@@ -116,7 +116,9 @@ console.log(filter_price_product);
 // 1. Determine the average basket of the marketplace
 // 2. Log the average
 
-
+var price_products = marketplace.map(a => a.price);
+const average = (array) => array.reduce((a,b) => a + b /array.length);
+console.log(average(price_products));
 
 
 
