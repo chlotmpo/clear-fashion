@@ -176,6 +176,14 @@ for(var brand in brands){
 // 1. For each brand, sort the products by price, from highest to lowest
 // 2. Log the sort
 
+for (var brand in brands){
+  brands[brand].sort(function(a,b){
+    return a.price - b.price;
+  });
+}
+
+console.log(brands)
+
 
 // 🎯 TODO: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
