@@ -75,7 +75,7 @@ marketplace.forEach(function(entry){
 })
 
 console.log(brands_name2);
-const different_brands_name = new Set(brands_name2);
+const different_brands_name = Array.from(new Set(brands_name1));
 console.log(different_brands_name);
 
 // 🎯 TODO: Sort by price
@@ -144,6 +144,32 @@ console.log(average(price_products));
 //
 // 2. Log the variable
 // 3. Log the number of products by brands
+
+
+var brands = {};
+
+different_brands_name.forEach(function(brand_name){
+  brands[brand_name] = []
+  
+  for(let i = 0; i < marketplace.length; i++){
+
+    if(marketplace[i].brand === brand_name) {
+    brands[marketplace[i].brand].push({
+      'link' : marketplace[i].link,
+      'price' : marketplace[i].price,
+      'name' : marketplace[i].name,
+      'date' : marketplace[i].date
+    });
+  }
+  
+  }
+});
+
+console.log(brands)
+
+for(var brand in brands){
+  console.log('Number of product for the brand ' + brand + " : " + brands[brand].length);
+}
 
 
 // 🎯 TODO: Sort by price for each brand
