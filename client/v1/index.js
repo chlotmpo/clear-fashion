@@ -189,6 +189,17 @@ console.log(brands)
 // 1. For each brand, sort the products by date, from old to recent
 // 2. Log the sort
 
+for (var brand in brands){
+  brands[brand].sort(function(a,b){
+    if (a.date < b.date){
+      return -1;
+    }else {
+      return 1;
+    };
+  });
+}
+
+console.log(brands);
 
 
 
