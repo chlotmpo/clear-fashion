@@ -216,8 +216,41 @@ console.log(brands);
 // The p90 value (90th percentile) is the lower value expected to be exceeded in 90% of the products
 
 
+function calcQuartile(array,q){
+  var a = array.slice();
 
+  // Convert into decimal 
+  q = q/100;
 
+  // Work out the position in the array of the percentile point
+  var p = ((a.length) - 1) * q;
+  var b = Math.floor(p);
+
+  // Work out what we rounded off (if anything)
+  var remainder = p - b;
+
+  // See whether that data exists directly
+  if (a[b+1]!==undefined){
+      return parseFloat(a[b]) + remainder * (parseFloat(a[b+1]) - parseFloat(a[b]));
+  }else{
+      return parseFloat(a[b]);
+  }
+}
+
+var p90_values = [];
+var price_for_brands = [];
+
+for (const [key, value] of Object.entries(brands)) {
+  //console.log(${key}: ${value});
+
+  for (let i = 0; i < value.length; i++){
+    price_for_brands.push(value[i].price);
+    }
+
+  p90_values.push(calcQuartile(price_for_brands,90));
+}
+
+console.log(p90_values)
 
 /**
  * 🧥
@@ -290,6 +323,10 @@ const COTELE_PARIS = [
 // 🎯 TODO: New released products
 // // 1. Log if we have new products only (true or false)
 // // A new product is a product `released` less than 2 weeks.
+
+function new_product(product){
+  
+}
 
 
 // 🎯 TODO: Reasonable price
