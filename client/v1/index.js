@@ -394,8 +394,8 @@ console.log(find_product_with_uuid(COTELE_PARIS,'b56c6d88-749a-5b4c-b571-e5b5c64
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the new list of product
 
-console.log("LOG BEFORE DELETION : ");
-console.log(COTELE_PARIS);
+// console.log("LOG BEFORE DELETION : ");
+// console.log(COTELE_PARIS);
 
 function delete_product_by_uuid(uuid, products){
   for (let i = 0; i < products.length; i++){
@@ -427,6 +427,12 @@ jacket.favorite = true;
 // 1. Log `blueJacket` and `jacket` variables
 // 2. What do you notice?
 
+console.log('blueJacket :>> ', blueJacket);
+console.log('jacket :>> ', jacket);
+
+// we can notice that the two variables are exactly the same even after adding a new property to jacket. The both have this property now
+// it seems that when a 2 variables are copy of each other, if a modification affects one variable, the other will be affect too
+
 blueJacket = {
   'link': 'https://coteleparis.com/collections/tous-les-produits-cotele/products/la-veste-bleu-roi',
   'price': 110,
@@ -435,7 +441,11 @@ blueJacket = {
 
 // 3. Update `jacket` property with `favorite` to true WITHOUT changing blueJacket properties
 
+jacket = Object.assign({}, blueJacket);
+jacket.favorite = true;
 
+console.log('blueJacket :>> ', blueJacket);
+console.log('jacket :>> ', jacket);
 
 
 
