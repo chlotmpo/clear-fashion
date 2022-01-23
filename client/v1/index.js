@@ -377,6 +377,18 @@ console.log(reasonable_price_shop(COTELE_PARIS));
 // 1. Find the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the product
 
+function find_product_with_uuid(products, uuid){
+  let product = {}
+  for (let i = 0; i < COTELE_PARIS.length; i++){
+    if(COTELE_PARIS[i].uuid = uuid){
+      product = COTELE_PARIS[i];
+    }
+  }
+  return product
+}
+
+console.log(find_product_with_uuid(COTELE_PARIS,'b56c6d88-749a-5b4c-b571-e5b5c6483131'));
+
 
 // 🎯 TODO: Delete a specific product
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
