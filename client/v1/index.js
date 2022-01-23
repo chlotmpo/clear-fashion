@@ -267,7 +267,7 @@ const COTELE_PARIS = [
     price: 45,
     name: 'BASEBALL CAP - TAUPE',
     uuid: 'af07d5a4-778d-56ad-b3f5-7001bf7f2b7d',
-    released: '2021-01-11'
+    released: '2022-01-19'
   },
   {
     link: 'https://coteleparis.com//collections/tous-les-produits-cotele/products/la-chemise-milleraie-navy',
@@ -325,7 +325,17 @@ const COTELE_PARIS = [
 // // A new product is a product `released` less than 2 weeks.
 
 function new_product(product){
-  
+  let new_product = false;
+  if ((new Date().getTime() - new Date(product.released).getTime() ) / (24*60*60*1000) < 14) {
+    new_product = true;
+  }
+  return new_product;
+}
+
+for (let i = 0; i < COTELE_PARIS.length; i++){
+  if(new_product(COTELE_PARIS[i]) == true){
+    console.log("This is a new product : " + COTELE_PARIS[i].link);
+  }
 }
 
 
