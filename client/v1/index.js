@@ -379,9 +379,9 @@ console.log(reasonable_price_shop(COTELE_PARIS));
 
 function find_product_with_uuid(products, uuid){
   let product = {}
-  for (let i = 0; i < COTELE_PARIS.length; i++){
-    if(COTELE_PARIS[i].uuid = uuid){
-      product = COTELE_PARIS[i];
+  for (let i = 0; i < products.length; i++){
+    if(products[i].uuid === uuid){
+      product = products[i];
     }
   }
   return product
@@ -393,6 +393,23 @@ console.log(find_product_with_uuid(COTELE_PARIS,'b56c6d88-749a-5b4c-b571-e5b5c64
 // 🎯 TODO: Delete a specific product
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the new list of product
+
+console.log("LOG BEFORE DELETION : ");
+console.log(COTELE_PARIS);
+
+function delete_product_by_uuid(uuid, products){
+  for (let i = 0; i < products.length; i++){
+    if(products[i].uuid === uuid){
+      console.log(products[i]);
+      products.splice(i,1); //we want to delete only one element at the specified index
+      break;
+    }
+  }
+  return products
+}
+
+console.log("LOG AFTER DELETION : ");
+console.log(delete_product_by_uuid('b56c6d88-749a-5b4c-b571-e5b5c6483131', COTELE_PARIS));
 
 // 🎯 TODO: Save the favorite product
 let blueJacket = {
