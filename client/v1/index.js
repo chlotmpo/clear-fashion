@@ -332,6 +332,7 @@ function new_product(product){
   return new_product;
 }
 
+//i change a released date in the COTELE_PARIS object to have one new product eligible at the current date
 for (let i = 0; i < COTELE_PARIS.length; i++){
   if(new_product(COTELE_PARIS[i]) == true){
     console.log("This is a new product : " + COTELE_PARIS[i].link);
@@ -342,6 +343,34 @@ for (let i = 0; i < COTELE_PARIS.length; i++){
 // 🎯 TODO: Reasonable price
 // // 1. Log if coteleparis is a reasonable price shop (true or false)
 // // A reasonable price if all the products are less than 100€
+
+let number_product = COTELE_PARIS.length;
+let reasonable_price = 0;
+
+for (let i = 0; i < COTELE_PARIS.length; i++){
+  if (COTELE_PARIS[i].price < 100){
+    reasonable_price++;
+  }
+}
+
+if(number_product == reasonable_price){
+  console.log("COTELE PARIS is a reasonable shop!");
+}
+else console.log("COTELE PARIS is not a reasonable shop!");
+
+//other manner with true/false verification 
+function reasonable_price_shop(products){
+  let reasonable = 0;
+  for (let i = 0; i < COTELE_PARIS.length; i++){
+    if(COTELE_PARIS[i].price < 100){
+      reasonable++;
+    }
+  }
+
+  return reasonable == COTELE_PARIS.length;
+}
+
+console.log(reasonable_price_shop(COTELE_PARIS));
 
 
 // 🎯 TODO: Find a specific product
