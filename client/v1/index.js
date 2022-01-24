@@ -112,8 +112,8 @@ const filter_price_product = marketplace.filter(obj => obj.price >= 50 && obj.pr
 console.log(filter_price_product);
 
 
-// 🎯 TODO: Average Basket
-// 1. Determine the average basket of the marketplace
+// 🎯 TODO: Average price
+// 1. Determine the average price of the marketplace
 // 2. Log the average
 
 var price_products = marketplace.map(a => a.price);
