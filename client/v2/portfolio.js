@@ -7,6 +7,7 @@ let currentPagination = {};
 let currentBrand = "";
 let ReasonableChecked = false;
 let RecentlyChecked = false;
+let kindOfSort = "";
 
 // inititiate selectors
 const selectShow = document.querySelector('#show-select');
@@ -16,6 +17,7 @@ const spanNbProducts = document.querySelector('#nbProducts');
 const selectBrand = document.querySelector('#brand-select');
 const selectReasonable = document.querySelector('#reasonable-price');
 const selectRecentlyReleased = document.querySelector('#recently-released');
+const selectSort = document.querySelector('#sort-select');
 
 
 
@@ -157,11 +159,18 @@ const render = (products, pagination) => {
     if(ReasonableChecked){
       currentProducts = currentProducts.filter(product => reasonable_price(product));
     }
+    if(kindOfSort !== "no-sort"){
+      if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
+      else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
+      else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+      else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
+    }
       render(currentProducts, currentPagination);
   })
 });
 
 selectPage.addEventListener('change', event => {
+  console.log(RecentlyChecked);
   currentPagination.currentPage = parseInt(event.target.value);
   fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
   .then(setCurrentProducts)
@@ -174,6 +183,12 @@ selectPage.addEventListener('change', event => {
     }
     if(ReasonableChecked){
       currentProducts = currentProducts.filter(product => reasonable_price(product));
+    }
+    if(kindOfSort !== "no-sort"){
+      if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
+      else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
+      else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+      else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
     }
       render(currentProducts, currentPagination);
   })
@@ -200,6 +215,12 @@ selectBrand.addEventListener('change', event => {
       if(ReasonableChecked){
         currentProducts = currentProducts.filter(product => reasonable_price(product));
       }
+      if(kindOfSort !== "no-sort"){
+        if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
+        else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
+        else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+        else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
+      }
         render(currentProducts, currentPagination);
     })
 });
@@ -217,6 +238,12 @@ selectReasonable.addEventListener('change', event => {
     }
     if(ReasonableChecked){
       currentProducts = currentProducts.filter(product => reasonable_price(product));
+    }
+    if(kindOfSort !== "no-sort"){
+      if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
+      else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
+      else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+      else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
     }
       render(currentProducts, currentPagination);
   })
@@ -237,10 +264,41 @@ selectRecentlyReleased.addEventListener('change', event => {
       if(ReasonableChecked){
         currentProducts = currentProducts.filter(product => reasonable_price(product));
       }
+      if(kindOfSort !== "no-sort"){
+        if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
+        else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
+        else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+        else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
+      }
         render(currentProducts, currentPagination);
     })
     
 });
+
+selectSort.addEventListener('change', event =>{
+  kindOfSort = event.target.value;
+  console.log(kindOfSort);
+  fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+  .then(setCurrentProducts)
+  .then(() => { 
+    if(currentBrand !== ""){
+      currentProducts = currentProducts.filter(product => product.brand === currentBrand);
+    }
+    if(RecentlyChecked){
+      currentProducts = currentProducts.filter(product => new_product(product))
+    }
+    if(ReasonableChecked){
+      currentProducts = currentProducts.filter(product => reasonable_price(product));
+    }
+    if(kindOfSort !== "no-sort"){
+      if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
+      else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
+      else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+      else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
+    }
+      render(currentProducts, currentPagination);
+  })
+})
 
 
 /**
