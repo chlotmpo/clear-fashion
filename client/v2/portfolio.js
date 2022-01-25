@@ -15,6 +15,7 @@ const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbProductsDisplayed = document.querySelector('#nbProductsDisplayed');
+const spanNbNewProducts = document.querySelector('#nbNewProducts');
 const selectBrand = document.querySelector('#brand-select');
 const selectReasonable = document.querySelector('#reasonable-price');
 const selectRecentlyReleased = document.querySelector('#recently-released');
@@ -108,6 +109,7 @@ const renderIndicators = pagination => {
 
   spanNbProducts.innerHTML = count;
   spanNbProductsDisplayed.innerHTML = currentProducts.length;
+  spanNbNewProducts.innerHTML = currentProducts.filter(product => new_product(product)).length;
 };
 
 /**
