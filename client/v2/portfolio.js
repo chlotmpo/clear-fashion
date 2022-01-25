@@ -20,8 +20,9 @@ const selectBrand = document.querySelector('#brand-select');
 const selectReasonable = document.querySelector('#reasonable-price');
 const selectRecentlyReleased = document.querySelector('#recently-released');
 const selectSort = document.querySelector('#sort-select');
-
-
+const spanp50 = document.querySelector('#p50Value');
+const spanp90 = document.querySelector('#p90Value');
+const spanp95 = document.querySelector('#p95Value');
 
 /**
  * Set global value
@@ -110,6 +111,9 @@ const renderIndicators = pagination => {
   spanNbProducts.innerHTML = count;
   spanNbProductsDisplayed.innerHTML = currentProducts.length;
   spanNbNewProducts.innerHTML = currentProducts.filter(product => new_product(product)).length;
+  spanp50.innerHTML = calcQuartile(currentProducts,50).toFixed(2);
+  spanp90.innerHTML = calcQuartile(currentProducts,90).toFixed(2);
+  spanp95.innerHTML = calcQuartile(currentProducts,95).toFixed(2);
 };
 
 /**
@@ -323,4 +327,28 @@ function reasonable_price(product){
     reasonable = true;
   }
   return reasonable;
+}
+
+function calcQuartile(products,q){
+  var price_products = products.map(a => a.price);
+
+  // Sort the array into ascending order
+  var data = price_products.sort((e1, e2) => { return e1 >  e2});
+
+  // Convert into decimal 
+  q = q/100;
+
+  // Work out the position in the array of the percentile point
+  var p = ((data.length) - 1) * q;
+  var b = Math.floor(p);
+
+  // Work out what we rounded off (if anything)
+  var remainder = p - b;
+
+  // See whether that data exists directly
+  if (data[b+1]!==undefined){
+      return parseFloat(data[b]) + remainder * (parseFloat(data[b+1]) - parseFloat(data[b]));
+  }else{
+      return parseFloat(data[b]);
+  }
 }
