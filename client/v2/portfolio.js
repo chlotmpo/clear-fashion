@@ -4,12 +4,15 @@
 // current products on the page
 let currentProducts = [];
 let currentPagination = {};
+let currentBrand = "";
 
 // inititiqte selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const selectBrand = document.querySelector('#brand-select');
+
 
 /**
  * Set global value
@@ -27,7 +30,7 @@ const setCurrentProducts = ({result, meta}) => {
  * @param  {Number}  [size=12] - size of the page
  * @return {Object}
  */
-const fetchProducts = async (page, size = 12) => {
+const fetchProducts = async (page = 1, size = 12) => {
   try {
     const response = await fetch(
       `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
@@ -71,6 +74,8 @@ const renderProducts = products => {
   sectionProducts.appendChild(fragment);
 };
 
+
+
 /**
  * Render page selector
  * @param  {Object} pagination
@@ -96,10 +101,33 @@ const renderIndicators = pagination => {
   spanNbProducts.innerHTML = count;
 };
 
+/**
+ * Render brand selector
+ * @param  {Object} products
+ */
+ const renderBrands = products => {
+  const brands = []; // distinct list of brands 
+  const options = products.map(product => {
+    // if the brand doesn't exist in the list of brands
+    if(!brands.includes(product.brand)){
+      brands.push(product.brand);
+      return `<option value="${product.brand}" ${currentBrand === product.brand ? "selected" : ""}>${product.brand}</option>`;
+    }
+  });
+
+  options.unshift(`<option value="">All brands</option>`);
+
+  selectBrand.innerHTML = options.join('');
+  if(currentBrand === ""){
+    selectBrand.selectedIndex = 0;
+  }
+};
+
 const render = (products, pagination) => {
   renderProducts(products);
   renderPagination(pagination);
   renderIndicators(pagination);
+  renderBrands(products);
 };
 
 /**
@@ -113,15 +141,25 @@ const render = (products, pagination) => {
  selectShow.addEventListener('change', event => {
   currentPagination.pageSize = parseInt(event.target.value);
   fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
-    .then(setCurrentProducts)
-    .then(() => render(currentProducts, currentPagination));
+  .then(setCurrentProducts)
+  .then(() => { 
+    if(currentBrand !== ""){
+      currentProducts = currentProducts.filter(product => product.brand === currentBrand);
+    }
+      render(currentProducts, currentPagination);
+  })
 });
 
 selectPage.addEventListener('change', event => {
   currentPagination.currentPage = parseInt(event.target.value);
   fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
   .then(setCurrentProducts)
-  .then(() => render(currentProducts, currentPagination));
+  .then(() => { 
+    if(currentBrand !== ""){
+      currentProducts = currentProducts.filter(product => product.brand === currentBrand);
+    }
+      render(currentProducts, currentPagination);
+  })
 });
 
 document.addEventListener('DOMContentLoaded', () =>
@@ -129,3 +167,16 @@ document.addEventListener('DOMContentLoaded', () =>
     .then(setCurrentProducts)
     .then(() => render(currentProducts, currentPagination))
 );
+
+
+selectBrand.addEventListener('change', event => {
+  currentBrand = event.target.value;
+    fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+    .then(setCurrentProducts)
+    .then(() => { 
+      if(currentBrand !== ""){
+        currentProducts = currentProducts.filter(product => product.brand === currentBrand);
+      }
+        render(currentProducts, currentPagination);
+    })
+});
