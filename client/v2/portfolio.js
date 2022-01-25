@@ -5,13 +5,18 @@
 let currentProducts = [];
 let currentPagination = {};
 let currentBrand = "";
+let ReasonableChecked = false;
+let RecentlyChecked = false;
 
-// inititiqte selectors
+// inititiate selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 const selectBrand = document.querySelector('#brand-select');
+const selectReasonable = document.querySelector('#reasonable-price');
+const selectRecentlyReleased = document.querySelector('#recently-released');
+
 
 
 /**
@@ -146,6 +151,12 @@ const render = (products, pagination) => {
     if(currentBrand !== ""){
       currentProducts = currentProducts.filter(product => product.brand === currentBrand);
     }
+    if(RecentlyChecked){
+      currentProducts = currentProducts.filter(product => new_product(product))
+    }
+    if(ReasonableChecked){
+      currentProducts = currentProducts.filter(product => reasonable_price(product));
+    }
       render(currentProducts, currentPagination);
   })
 });
@@ -157,6 +168,12 @@ selectPage.addEventListener('change', event => {
   .then(() => { 
     if(currentBrand !== ""){
       currentProducts = currentProducts.filter(product => product.brand === currentBrand);
+    }
+    if(RecentlyChecked){
+      currentProducts = currentProducts.filter(product => new_product(product))
+    }
+    if(ReasonableChecked){
+      currentProducts = currentProducts.filter(product => reasonable_price(product));
     }
       render(currentProducts, currentPagination);
   })
@@ -177,6 +194,71 @@ selectBrand.addEventListener('change', event => {
       if(currentBrand !== ""){
         currentProducts = currentProducts.filter(product => product.brand === currentBrand);
       }
+      if(RecentlyChecked){
+        currentProducts = currentProducts.filter(product => new_product(product))
+      }
+      if(ReasonableChecked){
+        currentProducts = currentProducts.filter(product => reasonable_price(product));
+      }
         render(currentProducts, currentPagination);
     })
 });
+
+selectReasonable.addEventListener('change', event => {
+  ReasonableChecked = selectReasonable.checked;
+  fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+  .then(setCurrentProducts)
+  .then(() => { 
+    if(currentBrand !== ""){
+      currentProducts = currentProducts.filter(product => product.brand === currentBrand);
+    }
+    if(RecentlyChecked){
+      currentProducts = currentProducts.filter(product => new_product(product));
+    }
+    if(ReasonableChecked){
+      currentProducts = currentProducts.filter(product => reasonable_price(product));
+    }
+      render(currentProducts, currentPagination);
+  })
+  
+});
+
+selectRecentlyReleased.addEventListener('change', event => {
+    RecentlyChecked = selectRecentlyReleased.checked;
+    fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+    .then(setCurrentProducts)
+    .then(() => { 
+      if(currentBrand !== ""){
+        currentProducts = currentProducts.filter(product => product.brand === currentBrand);
+      }
+      if(RecentlyChecked){
+        currentProducts = currentProducts.filter(product => new_product(product))
+      }
+      if(ReasonableChecked){
+        currentProducts = currentProducts.filter(product => reasonable_price(product));
+      }
+        render(currentProducts, currentPagination);
+    })
+    
+});
+
+
+/**
+ *  Methods needed
+ */
+
+ function new_product(product){
+  let new_product = false;
+  if ((new Date().getTime() - new Date(product.released).getTime() ) / (24*60*60*1000) < 14) {
+    new_product = true;
+  }
+  return new_product;
+}
+
+function reasonable_price(product){
+  let reasonable = false;
+  if(product.price < 50){
+    reasonable = true;
+  }
+  return reasonable;
+}
