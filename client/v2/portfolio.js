@@ -8,6 +8,7 @@ let currentBrand = "";
 let ReasonableChecked = false;
 let RecentlyChecked = false;
 let kindOfSort = "";
+let favoriteProducts = [];
 
 // inititiate selectors
 const selectShow = document.querySelector('#show-select');
@@ -74,6 +75,8 @@ const renderProducts = products => {
         <span>${product.brand}</span>
         <a href="${product.link}" target="_blank">${product.name}</a>
         <span>${product.price}</span>
+        <input type="checkbox" onclick="checkFavorite('${product.uuid}')" ${product.favorite ? "checked" : ""}>
+        <label for="favorite-product">Add to favorite</label>
       </div>
     `;
     })
@@ -159,6 +162,9 @@ const render = (products, pagination) => {
   currentPagination.pageSize = parseInt(event.target.value);
   fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
   .then(setCurrentProducts)
+  .then(() => {
+    updateCurrentProductsWithFavorites()
+  })
   .then(() => { 
     if(currentBrand !== ""){
       currentProducts = currentProducts.filter(product => product.brand === currentBrand);
@@ -184,6 +190,9 @@ selectPage.addEventListener('change', event => {
   currentPagination.currentPage = parseInt(event.target.value);
   fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
   .then(setCurrentProducts)
+  .then(() => {
+    updateCurrentProductsWithFavorites()
+  })
   .then(() => { 
     if(currentBrand !== ""){
       currentProducts = currentProducts.filter(product => product.brand === currentBrand);
@@ -207,6 +216,9 @@ selectPage.addEventListener('change', event => {
 document.addEventListener('DOMContentLoaded', () =>
   fetchProducts()
     .then(setCurrentProducts)
+    .then(() => {
+      updateCurrentProductsWithFavorites()
+    })
     .then(() => render(currentProducts, currentPagination))
 );
 
@@ -215,6 +227,9 @@ selectBrand.addEventListener('change', event => {
   currentBrand = event.target.value;
     fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
     .then(setCurrentProducts)
+    .then(() => {
+      updateCurrentProductsWithFavorites()
+    })
     .then(() => { 
       if(currentBrand !== ""){
         currentProducts = currentProducts.filter(product => product.brand === currentBrand);
@@ -239,6 +254,9 @@ selectReasonable.addEventListener('change', event => {
   ReasonableChecked = selectReasonable.checked;
   fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
   .then(setCurrentProducts)
+  .then(() => {
+    updateCurrentProductsWithFavorites()
+  })
   .then(() => { 
     if(currentBrand !== ""){
       currentProducts = currentProducts.filter(product => product.brand === currentBrand);
@@ -264,6 +282,9 @@ selectRecentlyReleased.addEventListener('change', event => {
     RecentlyChecked = selectRecentlyReleased.checked;
     fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
     .then(setCurrentProducts)
+    .then(() => {
+      updateCurrentProductsWithFavorites()
+    })
     .then(() => { 
       if(currentBrand !== ""){
         currentProducts = currentProducts.filter(product => product.brand === currentBrand);
@@ -289,6 +310,9 @@ selectSort.addEventListener('change', event =>{
   kindOfSort = event.target.value;
   fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
   .then(setCurrentProducts)
+  .then(() => {
+    updateCurrentProductsWithFavorites()
+  })
   .then(() => { 
     if(currentBrand !== ""){
       currentProducts = currentProducts.filter(product => product.brand === currentBrand);
@@ -308,6 +332,8 @@ selectSort.addEventListener('change', event =>{
       render(currentProducts, currentPagination);
   })
 })
+
+
 
 
 /**
@@ -358,4 +384,30 @@ function lastReleasedProduct(products){
   products.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()});
   return products[0];
 }
+
+function checkFavorite(product_id){
+  const product = currentProducts.find(product => {
+    return product.uuid === product_id;
+  });  
+  const index = currentProducts.indexOf(product);
+  currentProducts[index].favorite = !product.favorite;
+  if(currentProducts[index].favorite){
+    favoriteProducts.push(currentProducts[index]);
+  }
+  else{
+    favoriteProducts = favoriteProducts.filter(product => product.uuid !== product_id);
+  }
+  render(currentProducts, currentPagination);
+}
+
+function updateCurrentProductsWithFavorites(){
+  const listProducts = currentProducts.map(product => {
+    const found = favoriteProducts.find(favoriteProduct => favoriteProduct.uuid === product.uuid);
+    if(found) product.favorite = true;
+    return product;
+  });
+  currentProducts = listProducts;
+  console.log(currentProducts);
+}
+
 
