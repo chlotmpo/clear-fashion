@@ -23,6 +23,7 @@ const selectSort = document.querySelector('#sort-select');
 const spanp50 = document.querySelector('#p50Value');
 const spanp90 = document.querySelector('#p90Value');
 const spanp95 = document.querySelector('#p95Value');
+const lastReleasedDate = document.querySelector('#last-released');
 
 /**
  * Set global value
@@ -114,6 +115,7 @@ const renderIndicators = pagination => {
   spanp50.innerHTML = calcQuartile(currentProducts,50).toFixed(2);
   spanp90.innerHTML = calcQuartile(currentProducts,90).toFixed(2);
   spanp95.innerHTML = calcQuartile(currentProducts,95).toFixed(2);
+  lastReleasedDate.innerHTML = lastReleasedProduct(currentProducts).released;
 };
 
 /**
@@ -285,7 +287,6 @@ selectRecentlyReleased.addEventListener('change', event => {
 
 selectSort.addEventListener('change', event =>{
   kindOfSort = event.target.value;
-  console.log(kindOfSort);
   fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
   .then(setCurrentProducts)
   .then(() => { 
@@ -352,3 +353,9 @@ function calcQuartile(products,q){
       return parseFloat(data[b]);
   }
 }
+
+function lastReleasedProduct(products){
+  products.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()});
+  return products[0];
+}
+
