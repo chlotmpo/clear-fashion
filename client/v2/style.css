@@ -1,0 +1,32 @@
+header{
+    background-color: #000000;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('background-clothes.jpg');
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    line-height: 1.2;
+    padding: 10vw 2em;
+    text-align: center;
+    color: #ffffff;
+}
+body{
+    margin: 0 auto;
+    max-width: 50em;
+    font-family: "Helvetica", "Arial", sans-serif;
+    line-height: 1.5;
+    padding: 4em 1em;
+    color: #555;
+    /*text-align : center;*/
+}
+h2 {
+    margin-top: 1em;
+    padding-top: 1em;
+}
+h2,
+h3,
+strong {
+    color: #333;
+}
+a{
+    color: #cc4747
+}

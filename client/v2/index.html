@@ -3,12 +3,17 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>👕 Clear Fahion | Environmentally & human-friendly clothes</title>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <h1>Clear fashion</h1>
+    <header>
+      <h1>👕 Clear Fahion 👕</h1>
+      <h1>| Environmentally & human-friendly clothes |</h1>
+    </header>
+    <h2>Options on the page</h2>
     <section id="options">
       <div id="show">
-        <label for="show-select">Show:</label>
+        <label for="show-select">Number of product displayed:</label>
         <select name="show" id="show-select">
           <option value="12">12</option>
           <option value="24">24</option>
@@ -19,19 +24,28 @@
         <label for="page-select">Go to page:</label>
         <select name="page" id="page-select"> </select>
       </div>
+      <h2>Filters</h2>
       <div id="filters">
-        <input type="checkbox" id="reasonable-price">
-        <label for="reasonable-price">By Reasonable Price</label>
-        <input type="checkbox" id="recently-released">
-        <label for="recently-released">By Recently Released</label>        <div id="brand">
+       <div id="brand">
           <label for="brand-select">By brands:</label>
           <select name="brand" id="brand-select"> </select>
+       </div>
+       <div>
+          <input type="checkbox" id="reasonable-price">
+          <label for="reasonable-price">Reasonable price products</label>
         </div>
-        <input type="checkbox" id="show-favorite">
-        <label for="favorite">Show Favorite Products</label> 
+        <div></div>
+          <input type="checkbox" id="recently-released">
+          <label for="recently-released">Recently released products</label>
+        </div>
+        <div></div>  
+          <input type="checkbox" id="show-favorite">
+          <label for="favorite">Show Favorite Products</label> 
+        </div>
       </div>
+      <h2>Sort the products</h2>
       <div id="sort">
-        <label for="sort-select">Sort:</label>
+        <label for="sort-select">Select the sort:</label>
         <select name="sort" id="sort-select">
           <option value="no-sort">No Sort</option>
           <option value="price-asc">Cheaper</option>
@@ -44,32 +58,36 @@
     <section id="indicators">
       <h2>Indicators</h2>
       <div>
-        <span>Number of total products</span>
-        <span id="nbProducts">0</span>
+        <span>Number of total products :</span>
+        <strong id="nbProducts">0</strong>
+      </div>
+      <h4>Related to the current selection of products</h4>
+      <div>
+        <span>Number of products displayed :</span>
+        <strong id="nbProductsDisplayed">0</strong>
       </div>
       <div>
-        <span>Number of products displayed</span>
-        <span id="nbProductsDisplayed">0</span>
+        <span>Number of new products :</span>
+        <strong id="nbNewProducts">0</strong>
       </div>
       <div>
-        <span>Number of new products</span>
-        <span id="nbNewProducts">0</span>
+        <span>p50 price value :</span>
+        <strong id="p50Value">0</strong>
+        <strong>€</strong>
       </div>
       <div>
-        <span>p50 price value</span>
-        <span id="p50Value">0</span>
+        <span>p90 price value :</span>
+        <strong id="p90Value">0</strong>
+        <strong>€</strong>
       </div>
       <div>
-        <span>p90 price value</span>
-        <span id="p90Value">0</span>
+        <span>p95 price value :</span>
+        <strong id="p95Value">0</strong>
+        <strong>€</strong>
       </div>
       <div>
-        <span>p95 price value</span>
-        <span id="p95Value">0</span>
-      </div>
-      <div>
-        <span>Last released date</span>
-        <span id="last-released">2020-01-01</span>
+        <span>Last released product date :</span>
+        <strong id="last-released">2020-01-01</strong>
       </div>
     </section>
     <section id="products"></section>
