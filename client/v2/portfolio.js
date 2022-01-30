@@ -74,14 +74,20 @@ const renderProducts = products => {
     .map(product => {
       return `
       <div class="product" id=${product.uuid}>
-        <span>Brand :</span>
-        <strong>${product.brand}</strong>
-        <span>Link :</span>
-        <a href="${product.link}" target="_blank">${product.name}</a>
-        <span>Price :</span>
-        <strong>${product.price} €</strong>
-        <input type="checkbox" onclick="checkFavorite('${product.uuid}')" ${product.favorite ? "checked" : ""}>
-        <label for="favorite-product">Add to favorite</label>
+        <div>
+          <span>Brand 👚 : </span>
+          <strong>${product.brand}</strong>
+        </div>
+        <div>
+          <span>Link 📎 : </span>
+          <a href="${product.link}" target="_blank">${product.name}</a>
+        </div>
+          <span>Price 💸 : </span>
+          <strong>${product.price} €</strong>
+        <div>
+          <input type="checkbox" onclick="checkFavorite('${product.uuid}')" ${product.favorite ? "checked" : ""}>
+          <label for="favorite-product">Add to favorite</label>
+        </div>
       </div>
     `;
     })
