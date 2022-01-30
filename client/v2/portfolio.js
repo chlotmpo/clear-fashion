@@ -92,8 +92,9 @@ const renderProducts = products => {
     `;
     })
     .join('');
-
-  div.innerHTML = template;
+  if(currentProducts.length != 0 )div.innerHTML = template;
+  else div.innerHTML = "0 product correspond to these filters on this page";
+  // div.innerHTML = template;
   fragment.appendChild(div);
   sectionProducts.innerHTML = '<h2>Products</h2>';
   sectionProducts.appendChild(fragment);
@@ -126,10 +127,18 @@ const renderIndicators = pagination => {
   spanNbProducts.innerHTML = count;
   spanNbProductsDisplayed.innerHTML = currentProducts.length;
   spanNbNewProducts.innerHTML = currentProducts.filter(product => new_product(product)).length;
-  spanp50.innerHTML = calcQuartile(currentProducts,50).toFixed(2);
-  spanp90.innerHTML = calcQuartile(currentProducts,90).toFixed(2);
-  spanp95.innerHTML = calcQuartile(currentProducts,95).toFixed(2);
+  if(currentProducts.length != 0){
+  spanp50.innerHTML = calcQuartile(currentProducts,50).toFixed(2) + " €";
+  spanp90.innerHTML = calcQuartile(currentProducts,90).toFixed(2) + " €";
+  spanp95.innerHTML = calcQuartile(currentProducts,95).toFixed(2) + " €";
   lastReleasedDate.innerHTML = lastReleasedProduct(currentProducts).released;
+  }
+  else {
+    spanp50.innerHTML = "No data";
+    spanp90.innerHTML = "No data";
+    spanp95.innerHTML = "No data";
+    lastReleasedDate.innerHTML = "No data";
+  }
 };
 
 /**
@@ -200,7 +209,6 @@ const render = (products, pagination) => {
 });
 
 selectPage.addEventListener('change', event => {
-  console.log(RecentlyChecked);
   currentPagination.currentPage = parseInt(event.target.value);
   fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
   .then(setCurrentProducts)
@@ -466,7 +474,6 @@ function updateCurrentProductsWithFavorites(){
     return product;
   });
   currentProducts = listProducts;
-  console.log(currentProducts);
 }
 
 function isInFavorite(product){
