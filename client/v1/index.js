@@ -219,21 +219,25 @@ console.log(brands);
 function calcQuartile(array,q){
   var a = array.slice();
 
+
+  // Sort the array into ascending order
+  data = sortArr(a);
+
   // Convert into decimal 
   q = q/100;
 
   // Work out the position in the array of the percentile point
-  var p = ((a.length) - 1) * q;
+  var p = ((data.length) - 1) * q;
   var b = Math.floor(p);
 
   // Work out what we rounded off (if anything)
   var remainder = p - b;
 
   // See whether that data exists directly
-  if (a[b+1]!==undefined){
-      return parseFloat(a[b]) + remainder * (parseFloat(a[b+1]) - parseFloat(a[b]));
+  if (data[b+1]!==undefined){
+      return parseFloat(data[b]) + remainder * (parseFloat(data[b+1]) - parseFloat(data[b]));
   }else{
-      return parseFloat(a[b]);
+      return parseFloat(data[b]);
   }
 }
 
