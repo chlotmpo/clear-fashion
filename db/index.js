@@ -20,36 +20,43 @@ const MONGODB_DB_NAME = 'ClearFashion';
 // main().catch(console.error);
 
 let client
+let db
 
-// async function Connect(MONGODB_URI, MONGODB_DB_NAME){
-//     try {     
-//         const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true}); 
-//         const db =  client.db(MONGODB_DB_NAME)
-//     }
-//     catch(e) {
-//         console.error(e);
-//     }
-//     finally {
-//         await client.close();
-//     }
-// }
-
-// Connect(MONGODB_URI, MONGODB_DB_NAME);
-
+/**
+ * Connection to the db 
+ * @param {*} MONGODB_URI 
+ * @param {*} MONGODB_DB_NAME 
+ */
 async function Connect(MONGODB_URI, MONGODB_DB_NAME){
     console.log("⏳ Connection to MongoDB - ClearFashion cluster ...");
     client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
     console.log("🎯 Connection Successful");
-    const db =  client.db(MONGODB_DB_NAME)
+    db =  client.db(MONGODB_DB_NAME)
 }
 
+/**
+ * Close the connection to the db
+ */
 async function Close(){
     await client.close();
     console.log("🔐 Connection Closed");
 }
 
+var adresse_products = require('../server/sites/adresse_products.json');
+var dedicated_products = require('../server/sites/dedicated_products.json');
+var montlimart_products = require('../server/sites/montlimart_products.json');
+var products = adresse_products.concat(dedicated_products,montlimart_products);
+
+
+async function InsertProducts(){
+    const collection = db.collection('products');
+    const result = await collection.insertMany(products, {'ordered': false});
+    console.log("👕 Products successfully loaded in ClearFashion cluster");
+}
+
 async function main(){
     await Connect(MONGODB_URI, MONGODB_DB_NAME);
+    await InsertProducts();
     await Close();
 }
 
