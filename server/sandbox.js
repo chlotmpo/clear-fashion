@@ -11,18 +11,17 @@ const fs = require('fs');
 //https://www.dedicatedbrand.com/en/loadfilter?category=men%2Fnews
 //https://www.montlimart.com/toute-la-collection.html
 
-async function sandbox (eshop = 'dedicated') {
+async function sandbox (eshop = 'montlimart') {
   try {
     console.log(`🕵️‍♀️  browsing ${eshop} source`);
     var products = [];
     var json_content = [];
     switch (eshop){
       case "montlimart":
-        const prod1 = await montlimart.scrape('https://www.montlimart.com/toute-la-collection.html?p=1');
-        const prod2 = await montlimart.scrape('https://www.montlimart.com/toute-la-collection.html?p=2');
-        const prod3 = await montlimart.scrape('https://www.montlimart.com/toute-la-collection.html?p=3');
-        const prod4 = await montlimart.scrape('https://www.montlimart.com/toute-la-collection.html?p=4');
-        products = prod1.concat(prod2,prod3,prod4);
+        for (let i = 0; i < 8; i++){
+          const prod = await montlimart.scrape('https://www.montlimart.com/toute-la-collection.html?p=' + (i+1));
+          products = products.concat(prod);
+        }
         json_content = JSON.stringify(products, null, 2);
         fs.writeFileSync('sites/montlimart_products.json', json_content);   
         break;
@@ -34,6 +33,7 @@ async function sandbox (eshop = 'dedicated') {
           if(element.length === undefined){
             products.push(
               {
+                brand : "dedicated",
                 name : element.name,
                 price : element.price.priceAsNumber
               }

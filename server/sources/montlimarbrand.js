@@ -12,6 +12,7 @@ const cheerio = require('cheerio');
   
     return $('.category-products .item')
       .map((i, element) => {
+        const brand = "montlimart";
         //console.log(element)
         // name = "blabla";
         const name = $(element)
@@ -27,7 +28,7 @@ const cheerio = require('cheerio');
             .text()
         );
   
-        return {name, price};
+        return {brand, name, price};
       })
       .get();
   };
