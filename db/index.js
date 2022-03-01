@@ -64,7 +64,7 @@ async function FindProductBrand(brand){
 
 async function FindProductLessThan(price){
     const collection = db.collection('products');
-    const products_filtered = await collection.find({'price' : {'$lte' : price.toString()}}).toArray();
+    const products_filtered = await collection.find({'price' : {'$lte' : parseInt(price,10)}}).toArray();
     console.log("Filtered applied");
     console.log(products_filtered);
 }
@@ -73,6 +73,7 @@ async function FindProductsSortedByPrice(){
     const collection = db.collection('products')
     products = await collection.find().sort({'price' : 1}).toArray();
     products = DropNullElement(products);
+    // Still a problem with null elements
     // products_sorted = products.sort( (e1, e2) => { return e1.price >  e2.price});
     console.log('Products sorted');
     console.log(products);
@@ -80,7 +81,6 @@ async function FindProductsSortedByPrice(){
 
 function DropNullElement(products){
     for(let i = 0; i < products.length; i++){
-        console.log(products[i].price);
         if (products[i].price === null) products.splice(i,1);
     }
     return products
@@ -91,8 +91,8 @@ async function main(){
     db.collection('products').drop(); // to avoid duplicated data anytime this function is executed
     await InsertProducts();
     //await FindProductBrand('adresse');
-    //await FindProductLessThan(100);
-    await FindProductsSortedByPrice();
+    await FindProductLessThan(25);
+    //await FindProductsSortedByPrice();
     await Close();
 }
 
