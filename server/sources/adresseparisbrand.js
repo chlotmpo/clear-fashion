@@ -15,14 +15,17 @@ const parse = data => {
       const name = $(element)
         .find('.product-name')
         .attr('title');
-
       const price = parseInt(
         $(element)
           .find('.prixright')
           .text()
       );
+      const link = $(element)
+      .find('.product_img_link')
+      .children()
+      .attr('data-original');
 
-      return {brand, name, price};
+      return {brand, name, price, link};
     })
     .get();
 };

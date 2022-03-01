@@ -1,4 +1,4 @@
-const {MongoClient} = require('mongodb');
+const {MongoClient, ExplainVerbosity} = require('mongodb');
 const MONGODB_URI = 'mongodb+srv://chlotmpo:kp2MUB8zZUMtxi9@clearfahsion.poek8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const MONGODB_DB_NAME = 'ClearFashion';
 
@@ -56,18 +56,43 @@ async function InsertProducts(){
 }
 
 
-var brand = ' "$name" : "adresse"';
-
-async function FindProduct(brand){
+async function FindProductBrand(brand){
     const collection = db.collection('products');
-    const products_filtered = await collection.find({brand}).toArray();
+    const products_filtered = await collection.find({'brand' : `${brand}`}).toArray();
     console.log("Filtered applied");
     console.log(products_filtered);}
 
+async function FindProductLessThan(price){
+    const collection = db.collection('products');
+    const products_filtered = await collection.find({'price' : {'$lte' : price.toString()}}).toArray();
+    console.log("Filtered applied");
+    console.log(products_filtered);
+}
+
+async function FindProductsSortedByPrice(){
+    const collection = db.collection('products')
+    products = await collection.find().sort({'price' : 1}).toArray();
+    products = DropNullElement(products);
+    // products_sorted = products.sort( (e1, e2) => { return e1.price >  e2.price});
+    console.log('Products sorted');
+    console.log(products);
+}
+
+function DropNullElement(products){
+    for(let i = 0; i < products.length; i++){
+        console.log(products[i].price);
+        if (products[i].price === null) products.splice(i,1);
+    }
+    return products
+}
+
 async function main(){
     await Connect(MONGODB_URI, MONGODB_DB_NAME);
+    db.collection('products').drop(); // to avoid duplicated data anytime this function is executed
     await InsertProducts();
-    await FindProduct(brand);
+    //await FindProductBrand('adresse');
+    //await FindProductLessThan(100);
+    await FindProductsSortedByPrice();
     await Close();
 }
 

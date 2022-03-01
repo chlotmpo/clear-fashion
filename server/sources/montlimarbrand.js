@@ -27,8 +27,13 @@ const cheerio = require('cheerio');
             .find('.price')
             .text()
         );
+
+        const link = $(element)
+        .find('.product-name')
+        .children()
+        .attr('href');
   
-        return {brand, name, price};
+        return {brand, name, price, link};
       })
       .get();
   };

@@ -1,6 +1,6 @@
 
 /* eslint-disable no-console, no-process-exit */
-const dedicatedbrand = require('./sources/dedicatedbrand');
+//const dedicatedbrand = require('./sources/dedicatedbrand');
 const adresseParis = require('./sources/adresseparisbrand');
 const montlimart = require('./sources/montlimarbrand');
 
@@ -11,7 +11,7 @@ const fs = require('fs');
 //https://www.dedicatedbrand.com/en/loadfilter?category=men%2Fnews
 //https://www.montlimart.com/toute-la-collection.html
 
-async function sandbox (eshop = 'montlimart') {
+async function sandbox (eshop = 'dedicated') {
   try {
     console.log(`🕵️‍♀️  browsing ${eshop} source`);
     var products = [];
@@ -35,7 +35,8 @@ async function sandbox (eshop = 'montlimart') {
               {
                 brand : "dedicated",
                 name : element.name,
-                price : element.price.priceAsNumber
+                price : element.price.priceAsNumber,
+                link : `https://www.dedicatedbrand.com/en/` + element.cannicalUri
               }
             )
           }
