@@ -21,23 +21,6 @@ async function Connect(MONGODB_URI, MONGODB_DB_NAME){
     db =  client.db(MONGODB_DB_NAME)
 }
 
-
-// async function main () {
-//     const client = new MongoClient(MONGODB_URI);
-//     try {
-//         await client.connect();
-//         console.log("Connection to MongoDB - ClearFashion cluster ...");
-//     } catch(e) {
-//         console.error(e);
-//     }
-//     finally {
-//         await client.close();
-//         console.log("Connection successful");
-//     }
-// }
-
-// main().catch(console.error);
-
 /**
  * Close the connection to the db
  */
@@ -55,13 +38,20 @@ async function InsertProducts(){
     console.log("👕 Products successfully loaded in ClearFashion cluster");
 }
 
-
+/**
+ * Find all the products that belong to a given brand
+ * @param {name of the searched brand} brand 
+ */
 async function FindProductBrand(brand){
     const collection = db.collection('products');
     const products_filtered = await collection.find({'brand' : `${brand}`}).toArray();
     console.log("Filtered applied");
     console.log(products_filtered);}
 
+/**
+ * Find all the products that cost less than a given price 
+ * @param {price limit} price 
+ */
 async function FindProductLessThan(price){
     const collection = db.collection('products');
     const products_filtered = await collection.find({'price' : {'$lte' : parseInt(price,10)}}).toArray();
@@ -69,6 +59,9 @@ async function FindProductLessThan(price){
     console.log(products_filtered);
 }
 
+/**
+ * Return all the products sorted by price
+ */
 async function FindProductsSortedByPrice(){
     const collection = db.collection('products')
     products = await collection.find().sort({'price' : 1}).toArray();
@@ -79,13 +72,20 @@ async function FindProductsSortedByPrice(){
     console.log(products);
 }
 
+/**
+ * Drop the null elements of the list of products
+ * @param {list of products that we want review} products 
+ * @returns 
+ */
 function DropNullElement(products){
     for(let i = 0; i < products.length; i++){
         if (products[i].price === null) products.splice(i,1);
     }
     return products
 }
-
+/**
+ * Main function
+ */
 async function main(){
     await Connect(MONGODB_URI, MONGODB_DB_NAME);
     db.collection('products').drop(); // to avoid duplicated data anytime this function is executed

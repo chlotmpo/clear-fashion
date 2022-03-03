@@ -11,7 +11,7 @@ const fs = require('fs');
 //https://www.dedicatedbrand.com/en/loadfilter?category=men%2Fnews
 //https://www.montlimart.com/toute-la-collection.html
 
-async function sandbox (eshop = 'dedicated') {
+async function sandbox (eshop = 'montlimart') {
   try {
     console.log(`🕵️‍♀️  browsing ${eshop} source`);
     var products = [];
@@ -36,7 +36,8 @@ async function sandbox (eshop = 'dedicated') {
                 brand : "dedicated",
                 name : element.name,
                 price : element.price.priceAsNumber,
-                link : `https://www.dedicatedbrand.com/en/` + element.cannicalUri
+                link : `https://www.dedicatedbrand.com/en/` + element.cannicalUri,
+                photo : element.image[0]
               }
             )
           }

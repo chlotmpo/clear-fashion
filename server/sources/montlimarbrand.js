@@ -17,7 +17,6 @@ const cheerio = require('cheerio');
         // name = "blabla";
         const name = $(element)
           .find('.product-name')
-          .children()
           .text()
           .trim()
           .replace(/\s/g, ' ');
@@ -32,8 +31,15 @@ const cheerio = require('cheerio');
         .find('.product-name')
         .children()
         .attr('href');
+        var photo = $(element)
+        .find('.product-image')
+        .children()
+        .children()
+        .attr('src');
+
+        if(photo !== undefined) photo = photo.toString().replace(' ', '%20');
   
-        return {brand, name, price, link};
+        return {brand, name, price, link, photo};
       })
       .get();
   };

@@ -24,8 +24,11 @@ const parse = data => {
       .find('.product_img_link')
       .children()
       .attr('data-original');
+      const photo = $(element)
+      .find('.product_img_link')
+      .attr('href');
 
-      return {brand, name, price, link};
+      return {brand, name, price, link, photo};
     })
     .get();
 };
