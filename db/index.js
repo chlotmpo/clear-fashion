@@ -14,7 +14,7 @@ var products = adresse_products.concat(dedicated_products,montlimart_products);
  * @param {*} MONGODB_URI 
  * @param {*} MONGODB_DB_NAME 
  */
-async function Connect(MONGODB_URI, MONGODB_DB_NAME){
+module.exports.connect = async (uri = MONGODB_URI, name = MONGODB_DB_NAME) => { 
     console.log("⏳ Connection to MongoDB - ClearFashion cluster ...");
     client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
     console.log("🎯 Connection Successful");
@@ -24,10 +24,39 @@ async function Connect(MONGODB_URI, MONGODB_DB_NAME){
 /**
  * Close the connection to the db
  */
-async function Close(){
+module.exports.close = async () => {
     await client.close();
     console.log("🔐 Connection Closed");
 }
+
+/**
+ * Method to find product according to a given query
+ * @param {query that will be use to search product} query 
+ * @param {if we want to print the results or not} printResults 
+ * @returns 
+ */
+module.exports.findProducts = async (query, printResults = false) => {
+        const result = await db.collection("products").find(query).toArray()
+        if(printResults){
+            console.log(' 🧐 Find:', query);
+            console.log(` 📄 ${result.length} documents found:`);
+            await result.forEach(doc => console.log(doc));
+        }
+
+        return result;
+    
+}
+
+module.exports.findAllProducts = async (printResults = false) => {
+    const result = await db.collection("products").find().toArray()
+    if(printResults){
+        console.log(' 🧐 Find: All products', );
+        console.log(` 📄 ${result.length} documents found:`);
+        await result.forEach(doc => console.log(doc));
+    }
+    return result
+}
+
 
 /**
  * Insert the products in the db
@@ -38,25 +67,34 @@ async function InsertProducts(){
     console.log("👕 Products successfully loaded in ClearFashion cluster");
 }
 
+
+
 /**
  * Find all the products that belong to a given brand
  * @param {name of the searched brand} brand 
  */
-async function FindProductBrand(brand){
-    const collection = db.collection('products');
-    const products_filtered = await collection.find({'brand' : `${brand}`}).toArray();
-    console.log("Filtered applied");
-    console.log(products_filtered);}
+// async function FindProductBrand(brand){
+//     const collection = db.collection('products');
+//     const products_filtered = await collection.find({'brand' : `${brand}`}).toArray();
+//     console.log("Filtered applied");
+//     console.log(products_filtered);}
+function findProductBrand(brand){
+    return {brand: `${brand}`}
+}
+
 
 /**
  * Find all the products that cost less than a given price 
  * @param {price limit} price 
  */
-async function FindProductLessThan(price){
-    const collection = db.collection('products');
-    const products_filtered = await collection.find({'price' : {'$lte' : parseInt(price,10)}}).toArray();
-    console.log("Filtered applied");
-    console.log(products_filtered);
+// async function FindProductLessThan(price){
+//     const collection = db.collection('products');
+//     const products_filtered = await collection.find({'price' : {'$lte' : parseInt(price,10)}}).toArray();
+//     console.log("Filtered applied");
+//     console.log(products_filtered);
+// }
+function findProductLessThan(price){
+    return {price: {"$lte" : parseInt(price,10)}}
 }
 
 /**
@@ -71,6 +109,7 @@ async function FindProductsSortedByPrice(){
     console.log('Products sorted');
     console.log(products);
 }
+
 
 /**
  * Drop the null elements of the list of products
@@ -87,13 +126,18 @@ function DropNullElement(products){
  * Main function
  */
 async function main(){
-    await Connect(MONGODB_URI, MONGODB_DB_NAME);
+    await db.connect();
     db.collection('products').drop(); // to avoid duplicated data anytime this function is executed
     await InsertProducts();
+
     //await FindProductBrand('adresse');
-    await FindProductLessThan(25);
+    //await FindProductLessThan(25);
     //await FindProductsSortedByPrice();
-    await Close();
+
+    query = findProductBrand('adresse');
+    db.findProduct(query,true);
+
+    await db.close();
 }
 
-main();
+//main();
