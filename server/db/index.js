@@ -1,85 +1,157 @@
-require('dotenv').config();
-const {MongoClient} = require('mongodb');
-const fs = require('fs');
+const {MongoClient, ExplainVerbosity} = require('mongodb');
+const MONGODB_URI = 'mongodb+srv://chlotmpo:kp2MUB8zZUMtxi9@clearfahsion.poek8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const MONGODB_DB_NAME = 'ClearFashion';
 
-const MONGODB_DB_NAME = 'clearfashion';
-const MONGODB_COLLECTION = 'products';
-const MONGODB_URI = process.env.MONGODB_URI;
-
-let client = null;
-let database = null;
+let client
+let db
+var adresse_products = require('../sites/adresse_products.json');
+var dedicated_products = require('../sites/dedicated_products.json');
+var montlimart_products = require('../sites/montlimart_products.json');
+var products = adresse_products.concat(dedicated_products,montlimart_products);
 
 /**
- * Get db connection
- * @type {MongoClient}
+ * Connection to the db 
+ * @param {*} MONGODB_URI 
+ * @param {*} MONGODB_DB_NAME 
  */
-const getDB = module.exports.getDB = async () => {
-  try {
-    if (database) {
-      console.log('💽  Already Connected');
-      return database;
-    }
-
+module.exports.connect = async (uri = MONGODB_URI, name = MONGODB_DB_NAME) => { 
+    console.log("⏳ Connection to MongoDB - ClearFashion cluster ...");
     client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
-    database = client.db(MONGODB_DB_NAME);
-
-    console.log('💽  Connected');
-
-    return database;
-  } catch (error) {
-    console.error('🚨 MongoClient.connect...', error);
-    return null;
-  }
-};
+    console.log("🎯 Connection Successful");
+    db =  client.db(MONGODB_DB_NAME)
+}
 
 /**
- * Insert list of products
- * @param  {Array}  products
- * @return {Object}
- */
-module.exports.insert = async products => {
-  try {
-    const db = await getDB();
-    const collection = db.collection(MONGODB_COLLECTION);
-    // More details
-    // https://docs.mongodb.com/manual/reference/method/db.collection.insertMany/#insert-several-document-specifying-an-id-field
-    const result = await collection.insertMany(products, {'ordered': false});
-
-    return result;
-  } catch (error) {
-    console.error('🚨 collection.insertMany...', error);
-    fs.writeFileSync('products.json', JSON.stringify(products));
-    return {
-      'insertedCount': error.result.nInserted
-    };
-  }
-};
-
-/**
- * Find products based on query
- * @param  {Array}  query
- * @return {Array}
- */
-module.exports.find = async query => {
-  try {
-    const db = await getDB();
-    const collection = db.collection(MONGODB_COLLECTION);
-    const result = await collection.find(query).toArray();
-
-    return result;
-  } catch (error) {
-    console.error('🚨 collection.find...', error);
-    return null;
-  }
-};
-
-/**
- * Close the connection
+ * Close the connection to the db
  */
 module.exports.close = async () => {
-  try {
     await client.close();
-  } catch (error) {
-    console.error('🚨 MongoClient.close...', error);
-  }
-};
+    console.log("🔐 Connection Closed");
+}
+
+/**
+ * Method to find product according to a given query
+ * @param {query that will be use to search product} query 
+ * @param {if we want to print the results or not} printResults 
+ * @returns 
+ */
+module.exports.findProducts = async (query, printResults = false) => {
+        const result = await db.collection("products").find(query).toArray()
+        if(printResults){
+            console.log(' 🧐 Find:', query);
+            console.log(` 📄 ${result.length} documents found:`);
+            await result.forEach(doc => console.log(doc));
+        }
+
+        return result;
+    
+}
+
+/**
+ * Methode to find all products of the collection
+ */
+module.exports.findAllProducts = async (printResults = false) => {
+    const result = await db.collection("products").find().toArray()
+    if(printResults){
+        console.log(' 🧐 Find: All products', );
+        console.log(` 📄 ${result.length} documents found:`);
+        await result.forEach(doc => console.log(doc));
+    }
+    return result
+}
+
+/**
+ * Method to make aggregate query on the collection
+ * @param {query that we want to ask the collection about in order to filter the wanted products} query 
+ * @returns 
+ */
+module.exports.aggregateQuery = async (query = [{}]) => {
+
+    const result = await db.collection("products").aggregate(query).toArray()
+    return result;
+
+}
+
+/**
+ * Insert the products in the db
+ */
+async function InsertProducts(){
+    const collection = db.collection('products');
+    const result = await collection.insertMany(products, {'ordered': false});
+    console.log("👕 Products successfully loaded in ClearFashion cluster");
+}
+
+
+
+/**
+ * Find all the products that belong to a given brand
+ * @param {name of the searched brand} brand 
+ */
+// async function FindProductBrand(brand){
+//     const collection = db.collection('products');
+//     const products_filtered = await collection.find({'brand' : `${brand}`}).toArray();
+//     console.log("Filtered applied");
+//     console.log(products_filtered);}
+function findProductBrand(brand){
+    return {brand: `${brand}`}
+}
+
+
+/**
+ * Find all the products that cost less than a given price 
+ * @param {price limit} price 
+ */
+// async function FindProductLessThan(price){
+//     const collection = db.collection('products');
+//     const products_filtered = await collection.find({'price' : {'$lte' : parseInt(price,10)}}).toArray();
+//     console.log("Filtered applied");
+//     console.log(products_filtered);
+// }
+function findProductLessThan(price){
+    return {price: {"$lte" : parseInt(price,10)}}
+}
+
+/**
+ * Return all the products sorted by price
+ */
+async function FindProductsSortedByPrice(){
+    const collection = db.collection('products')
+    products = await collection.find().sort({'price' : 1}).toArray();
+    products = DropNullElement(products);
+    // Still a problem with null elements
+    // products_sorted = products.sort( (e1, e2) => { return e1.price >  e2.price});
+    console.log('Products sorted');
+    console.log(products);
+}
+
+
+/**
+ * Drop the null elements of the list of products
+ * @param {list of products that we want review} products 
+ * @returns 
+ */
+function DropNullElement(products){
+    for(let i = 0; i < products.length; i++){
+        if (products[i].price === null) products.splice(i,1);
+    }
+    return products
+}
+/**
+ * Main function
+ */
+async function main(){
+    await db.connect();
+    db.collection('products').drop(); // to avoid duplicated data anytime this function is executed
+    await InsertProducts();
+
+    //await FindProductBrand('adresse');
+    //await FindProductLessThan(25);
+    //await FindProductsSortedByPrice();
+
+    query = findProductBrand('adresse');
+    db.findProduct(query,true);
+
+    await db.close();
+}
+
+//main();

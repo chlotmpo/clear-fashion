@@ -2,7 +2,7 @@ const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
 const { ObjectId } = require('mongodb');
-const db = require('../db');
+const db = require('./db');
 
 
 
