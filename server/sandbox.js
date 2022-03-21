@@ -11,7 +11,7 @@ const fs = require('fs');
 //https://www.dedicatedbrand.com/en/loadfilter?category=men%2Fnews
 //https://www.montlimart.com/toute-la-collection.html
 
-async function sandbox (eshop = 'montlimart') {
+async function sandbox (eshop = 'adresse') {
   try {
     console.log(`🕵️‍♀️  browsing ${eshop} source`);
     var products = [];

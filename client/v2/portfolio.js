@@ -44,10 +44,10 @@ const setCurrentProducts = ({result, meta}) => {
  * @param  {Number}  [size=12] - size of the page
  * @return {Object}
  */
-const fetchProducts = async (page = 1, size = 12) => {
+const fetchProducts = async (page = 1, size = 30) => {
   try {
     const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
+      `https://server-wine-delta.vercel.app/products?page=${page}&size=${size}`
     );
     const body = await response.json();
 
@@ -73,21 +73,26 @@ const renderProducts = products => {
   const template = products
     .map(product => {
       return `
-      <div class="product" id=${product.uuid}>
-        <div>
-          <span>Brand 👚 : </span>
-          <strong>${product.brand}</strong>
-        </div>
-        <div>
-          <span>Link 📎 : </span>
-          <a href="${product.link}" target="_blank">${product.name}</a>
-        </div>
-          <span>Price 💸 : </span>
-          <strong>${product.price} €</strong>
-        <div>
-          <input type="checkbox" onclick="checkFavorite('${product.uuid}')" ${product.favorite ? "checked" : ""}>
-          <label for="favorite-product">Add to favorite</label>
-        </div>
+      <div class="product" id=${product._id}>
+          <div>
+            <span>Brand 👚 : </span>
+            <strong>${product.brand.toUpperCase()}</strong>
+          </div>
+          <div>
+            <span>Link 📎 : </span>
+            <a href="${product.link}" target="_blank">${product.name}</a>
+          </div>
+          <div class="photo">
+            <img src="${product.photo}"></img>
+          </div>
+          <div>
+           <span>Price 💸 : </span>
+            <strong>${product.price} €</strong>
+          </div>
+          <div> 
+            <input type="checkbox" onclick="checkFavorite('${product._id}')" ${product.favorite ? "checked" : ""}>
+            <label for="favorite-product">Add to favorite</label>
+          </div>
       </div>
     `;
     })
@@ -131,13 +136,13 @@ const renderIndicators = pagination => {
   spanp50.innerHTML = calcQuartile(currentProducts,50).toFixed(2) + " €";
   spanp90.innerHTML = calcQuartile(currentProducts,90).toFixed(2) + " €";
   spanp95.innerHTML = calcQuartile(currentProducts,95).toFixed(2) + " €";
-  lastReleasedDate.innerHTML = lastReleasedProduct(currentProducts).released;
+  // lastReleasedDate.innerHTML = lastReleasedProduct(currentProducts).released;
   }
   else {
     spanp50.innerHTML = "No data";
     spanp90.innerHTML = "No data";
     spanp95.innerHTML = "No data";
-    lastReleasedDate.innerHTML = "No data";
+    // lastReleasedDate.innerHTML = "No data";
   }
 };
 
@@ -197,8 +202,8 @@ const render = (products, pagination) => {
     if(kindOfSort !== "no-sort"){
       if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
       else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
-      else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
-      else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
+      // else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+    //  else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
     }
     if(FavoriteChecked){
       currentProducts = currentProducts.filter(product => isInFavorite(product));
@@ -227,8 +232,8 @@ selectPage.addEventListener('change', event => {
     if(kindOfSort !== "no-sort"){
       if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
       else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
-      else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
-      else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
+      // else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+      // else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
     }
     if(FavoriteChecked){
       currentProducts = currentProducts.filter(product => isInFavorite(product));
@@ -267,8 +272,8 @@ selectBrand.addEventListener('change', event => {
       if(kindOfSort !== "no-sort"){
         if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
         else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
-        else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
-        else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
+        // else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+        // else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
       }
       if(FavoriteChecked){
         currentProducts = currentProducts.filter(product => isInFavorite(product));
@@ -297,8 +302,8 @@ selectReasonable.addEventListener('change', event => {
     if(kindOfSort !== "no-sort"){
       if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
       else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
-      else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
-      else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
+      // else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+    //  else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
     }
     if(FavoriteChecked){
       currentProducts = currentProducts.filter(product => isInFavorite(product));
@@ -308,36 +313,36 @@ selectReasonable.addEventListener('change', event => {
   
 });
 
-selectRecentlyReleased.addEventListener('change', event => {
-    RecentlyChecked = selectRecentlyReleased.checked;
-    fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
-    .then(setCurrentProducts)
-    .then(() => {
-      updateCurrentProductsWithFavorites()
-    })
-    .then(() => { 
-      if(currentBrand !== ""){
-        currentProducts = currentProducts.filter(product => product.brand === currentBrand);
-      }
-      if(RecentlyChecked){
-        currentProducts = currentProducts.filter(product => new_product(product))
-      }
-      if(ReasonableChecked){
-        currentProducts = currentProducts.filter(product => reasonable_price(product));
-      }
-      if(kindOfSort !== "no-sort"){
-        if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
-        else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
-        else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
-        else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
-      }
-      if(FavoriteChecked){
-        currentProducts = currentProducts.filter(product => isInFavorite(product));
-      }
-        render(currentProducts, currentPagination);
-    })
+// selectRecentlyReleased.addEventListener('change', event => {
+//     RecentlyChecked = selectRecentlyReleased.checked;
+//     fetchProducts(currentPagination.currentPage, currentPagination.pageSize)
+//     .then(setCurrentProducts)
+//     .then(() => {
+//       updateCurrentProductsWithFavorites()
+//     })
+//     .then(() => { 
+//       if(currentBrand !== ""){
+//         currentProducts = currentProducts.filter(product => product.brand === currentBrand);
+//       }
+//       if(RecentlyChecked){
+//         currentProducts = currentProducts.filter(product => new_product(product))
+//       }
+//       if(ReasonableChecked){
+//         currentProducts = currentProducts.filter(product => reasonable_price(product));
+//       }
+//       if(kindOfSort !== "no-sort"){
+//         if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
+//         else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
+//         // else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+//         // else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
+//       }
+//       if(FavoriteChecked){
+//         currentProducts = currentProducts.filter(product => isInFavorite(product));
+//       }
+//         render(currentProducts, currentPagination);
+//     })
     
-});
+// });
 
 selectSort.addEventListener('change', event =>{
   kindOfSort = event.target.value;
@@ -359,8 +364,8 @@ selectSort.addEventListener('change', event =>{
     if(kindOfSort !== "no-sort"){
       if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
       else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
-      else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
-      else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
+      // else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+    //  else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
     }    
     if(FavoriteChecked){
       currentProducts = currentProducts.filter(product => isInFavorite(product));
@@ -389,8 +394,8 @@ selectShowFavorite.addEventListener('change', event =>{
     if(kindOfSort !== "no-sort"){
       if(kindOfSort === "price-asc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price >  e2.price});
       else if(kindOfSort === "price-desc") currentProducts = currentProducts.sort( (e1, e2) => { return e1.price <  e2.price});
-      else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
-      else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
+      // else if(kindOfSort === "date-asc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() > new Date(e2.released).getTime()})
+    //  else if(kindOfSort === "date-desc")  currentProducts = currentProducts.sort( (e1, e2) => { return new Date(e1.released).getTime() < new Date(e2.released).getTime()})
     }
     if(FavoriteChecked){
       currentProducts = currentProducts.filter(product => isInFavorite(product));
@@ -453,22 +458,22 @@ function lastReleasedProduct(products){
 
 function checkFavorite(product_id){
   const product = currentProducts.find(product => {
-    return product.uuid === product_id;
-  });  
+    return product._id === product_id;
+  });
   const index = currentProducts.indexOf(product);
   currentProducts[index].favorite = !product.favorite;
   if(currentProducts[index].favorite){
     favoriteProducts.push(currentProducts[index]);
   }
   else{
-    favoriteProducts = favoriteProducts.filter(product => product.uuid !== product_id);
+    favoriteProducts = favoriteProducts.filter(product => product._id !== product_id);
   }
   render(currentProducts, currentPagination);
 }
 
 function updateCurrentProductsWithFavorites(){
   const listProducts = currentProducts.map(product => {
-    const found = favoriteProducts.find(favoriteProduct => favoriteProduct.uuid === product.uuid);
+    const found = favoriteProducts.find(favoriteProduct => favoriteProduct._id === product._id);
     if(found) product.favorite = true;
     return product;
   });
@@ -478,7 +483,7 @@ function updateCurrentProductsWithFavorites(){
 function isInFavorite(product){
   var fav = false;
   for(var favorite in favoriteProducts){
-    if(product.uuid === favoriteProducts[favorite].uuid) fav = true;
+    if(product._id === favoriteProducts[favorite]._id) fav = true;
   }
   return fav;
 }

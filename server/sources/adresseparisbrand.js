@@ -20,11 +20,11 @@ const parse = data => {
           .find('.prixright')
           .text()
       );
-      const link = $(element)
+      const photo = $(element)
       .find('.product_img_link')
       .children()
       .attr('data-original');
-      const photo = $(element)
+      const link = $(element)
       .find('.product_img_link')
       .attr('href');
 

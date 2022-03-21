@@ -71,11 +71,6 @@
   },
   {
     "brand": "montlimart",
-    "name": "",
-    "price": null
-  },
-  {
-    "brand": "montlimart",
     "name": "CHEMISE SAINT PAUL",
     "price": 150,
     "link": "https://www.montlimart.com/chemise-saint-paul-vert-rayures.html",
@@ -678,13 +673,6 @@
   },
   {
     "brand": "montlimart",
-    "name": "Carte Cadeau Montlimart",
-    "price": null,
-    "link": "https://www.montlimart.com/carte-cadeau-6153.html",
-    "photo": "https://www.montlimart.com/media/catalog/product/cache/1/small_image/508,%20720x/17f82f742ffe127f42dca9de82fb58b1/c/a/carte-cadeau-simple-1.jpg"
-  },
-  {
-    "brand": "montlimart",
     "name": "CHEMISE SAINT REMY",
     "price": 160,
     "link": "https://www.montlimart.com/chemise-saint-remy-marine-rayures.html",
@@ -724,12 +712,5 @@
     "price": 45,
     "link": "https://www.montlimart.com/porte-carte-portebois-marine.html",
     "photo": "https://www.montlimart.com/media/catalog/product/cache/1/small_image/508,%20720x/17f82f742ffe127f42dca9de82fb58b1/2/0/20ah-portebois-accessoire-made-in-france-1.jpg"
-  },
-  {
-    "brand": "montlimart",
-    "name": "Carte Cadeau Montlimart",
-    "price": null,
-    "link": "https://www.montlimart.com/carte-cadeau-6153.html",
-    "photo": "https://www.montlimart.com/media/catalog/product/cache/1/small_image/508,%20720x/17f82f742ffe127f42dca9de82fb58b1/c/a/carte-cadeau-simple-1.jpg"
   }
 ]

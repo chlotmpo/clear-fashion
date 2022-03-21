@@ -2,8 +2,8 @@ const {MongoClient, ExplainVerbosity} = require('mongodb');
 const MONGODB_URI = 'mongodb+srv://chlotmpo:kp2MUB8zZUMtxi9@clearfahsion.poek8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const MONGODB_DB_NAME = 'ClearFashion';
 
-let client
-let db
+let client;
+let db;
 var adresse_products = require('../sites/adresse_products.json');
 var dedicated_products = require('../sites/dedicated_products.json');
 var montlimart_products = require('../sites/montlimart_products.json');
@@ -14,20 +14,29 @@ var products = adresse_products.concat(dedicated_products,montlimart_products);
  * @param {*} MONGODB_URI 
  * @param {*} MONGODB_DB_NAME 
  */
-module.exports.connect = async (uri = MONGODB_URI, name = MONGODB_DB_NAME) => { 
+const connect = async (uri = MONGODB_URI, name = MONGODB_DB_NAME) => { 
     console.log("⏳ Connection to MongoDB - ClearFashion cluster ...");
-    client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
-    console.log("🎯 Connection Successful");
-    db =  client.db(MONGODB_DB_NAME)
+    try {
+
+        client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
+        console.log("🎯 Connection Successful");
+        db =  client.db(MONGODB_DB_NAME);
+    }
+    catch (error) {
+        console.log('error :>> ', error);
+    }
 }
+module.exports.connect = connect;
 
 /**
  * Close the connection to the db
  */
-module.exports.close = async () => {
+const close = async () => {
     await client.close();
     console.log("🔐 Connection Closed");
 }
+module.exports.close = close;
+
 
 /**
  * Method to find product according to a given query
@@ -35,18 +44,20 @@ module.exports.close = async () => {
  * @param {if we want to print the results or not} printResults 
  * @returns 
  */
-module.exports.findProducts = async (query, printResults = false) => {
-        const result = await db.collection("products").find(query).toArray()
+module.exports.findProducts = async (query, offset = 0, limit = 0, printResults = false) => {
+        var result = await db.collection("products").find(query).skip(offset).limit(limit).toArray()
         if(printResults){
             console.log(' 🧐 Find:', query);
             console.log(` 📄 ${result.length} documents found:`);
             await result.forEach(doc => console.log(doc));
         }
-
         return result;
     
 }
 
+module.exports.countDocumentsDb = async () => {
+    return await db.collection("products").estimatedDocumentCount();
+}
 /**
  * Methode to find all products of the collection
  */
@@ -77,6 +88,7 @@ module.exports.aggregateQuery = async (query = [{}]) => {
  */
 async function InsertProducts(){
     const collection = db.collection('products');
+    products = products.sort((a, b) => 0.5 - Math.random());
     const result = await collection.insertMany(products, {'ordered': false});
     console.log("👕 Products successfully loaded in ClearFashion cluster");
 }
@@ -140,18 +152,18 @@ function DropNullElement(products){
  * Main function
  */
 async function main(){
-    await db.connect();
-    db.collection('products').drop(); // to avoid duplicated data anytime this function is executed
+    await connect();
+    await db.collection('products').drop(); // to avoid duplicated data anytime this function is executed
     await InsertProducts();
 
     //await FindProductBrand('adresse');
     //await FindProductLessThan(25);
     //await FindProductsSortedByPrice();
 
-    query = findProductBrand('adresse');
-    db.findProduct(query,true);
+    // query = findProductBrand('adresse');
+    // db.findProduct(query,true);
 
-    await db.close();
+    await close();
 }
 
 //main();

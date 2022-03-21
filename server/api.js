@@ -3,7 +3,7 @@ const express = require('express');
 const helmet = require('helmet');
 const { ObjectId } = require('mongodb');
 const db = require('./db');
-
+const { calculateLimitAndOffset, paginate } = require('paginate-info');
 
 
 const PORT = 8092;
@@ -28,10 +28,24 @@ console.log(`📡 Running on port ${PORT}`);
 
 // All products 
 app.get('/products', async(request, response) => {
-  products = await db.findAllProducts(true)
-  console.log(products.length)
-  response.send({"products" : products});
+  await connection();
+  const filters = request.query;
+  const count = await db.countDocumentsDb();
+  const { limit, offset } = calculateLimitAndOffset(parseInt(filters.page), parseInt(filters.size));
+  var products = await db.findProducts({}, offset, limit, false);
+  const meta = paginate(parseInt(filters.page), count, products, parseInt(filters.size));
+
+  response.send(
+    {
+      "success" : true, 
+      "data" : {
+        "result" : products, 
+        "meta" : meta
+      }
+    }
+  );
 })
+
 
 
 // Product search, Search for specific product 

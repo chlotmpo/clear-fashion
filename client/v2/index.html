@@ -15,9 +15,9 @@
       <div id="show">
         <label for="show-select">Number of product displayed:</label>
         <select name="show" id="show-select">
-          <option value="12">12</option>
-          <option value="24">24</option>
-          <option value="48">48</option>
+          <option value="30">30</option>
+          <option value="50">50</option>
+          <option value="80">80</option>
         </select>
       </div>
       <div id="page">
@@ -34,10 +34,6 @@
           <input type="checkbox" id="reasonable-price">
           <label for="reasonable-price">Reasonable price products</label>
         </div>
-        <div></div>
-          <input type="checkbox" id="recently-released">
-          <label for="recently-released">Recently released products</label>
-        </div>
         <div></div>  
           <input type="checkbox" id="show-favorite">
           <label for="favorite">Show Favorite Products</label> 
@@ -50,8 +46,6 @@
           <option value="no-sort">No Sort</option>
           <option value="price-asc">Cheaper</option>
           <option value="price-desc">Expensive</option>
-          <option value="date-asc">Recently released</option>
-          <option value="date-desc">Anciently released</option>
         </select>
       </div>
     </section>
@@ -81,10 +75,6 @@
       <div>
         <span>p95 price value :</span>
         <strong id="p95Value">0</strong>
-      </div>
-      <div>
-        <span>Last released product date :</span>
-        <strong id="last-released">2020-01-01</strong>
       </div>
     </section>
     <section id="products"></section>

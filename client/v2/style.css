@@ -30,13 +30,15 @@ strong {
 a{
     color: #cc4747
 }
-.product{
+.photo img{
+    height: 200px;
+    width: auto;
+    border-radius: 8px;
+}
+.product {
     text-align: center;
     margin-bottom: 2em;
     border: 2px solid rgb(77, 86, 128); padding: 5px; 
-    /* border-radius: 10px 100px / 120px; */
     border-radius : 10% / 60%;
-    /* border-top-left-radius: 50%; */
-    /* border: rgb(77, 86, 128) 5px double; */
     background-clip: content-box;
 }
