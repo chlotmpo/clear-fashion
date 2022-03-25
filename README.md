@@ -1,9 +1,10 @@
 # 👕 Clear Fashion
----
-Client url : https://client-iota-khaki.vercel.app/
+<hr>
+ Client url : https://client-iota-khaki.vercel.app/
 <br>
-API url : https://server-wine-delta.vercel.app/products
----
+ API url : https://server-wine-delta.vercel.app/products
+<hr>
+
 
 
 > What's the story behind each item of clothing you buy?
