@@ -1,6 +1,6 @@
 # 👕 Clear Fashion
 <hr>
- Client url : https://client-iota-khaki.vercel.app/
+ Client url : https://client-clear-fashion-chlotmpo.vercel.app/
 <br>
  API url : https://server-wine-delta.vercel.app/products
 <hr>
